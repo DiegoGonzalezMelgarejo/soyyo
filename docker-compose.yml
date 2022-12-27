@@ -1,0 +1,9 @@
+
+version: '3.3'
+services:
+ nest-api:
+   image: da10b020b368 #nombre de la imagen que hemos creado
+   restart: always
+   container_name: nest-api
+   ports:
+     - '3000:3000'

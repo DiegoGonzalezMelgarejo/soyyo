@@ -1,29 +1,50 @@
+/* eslint-disable prettier/prettier */
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
-import { Observable, map } from 'rxjs';
-import { EntitiesResponseDto } from './dto/entities-response.dto';
-import { AxiosResponse } from 'axios';
-import { Response } from 'src/commons/dto/ResponseDto';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {  lastValueFrom, map } from 'rxjs';
+
 import { EntitiesDto } from './dto/entities.dto';
-import { RequestDto } from './dto/RequestDto';
+import { RequestDto } from '../commons/dto/request.dto';
 
 @Injectable()
 export class EntitiesService {
   private readonly logger = new Logger('EntitiesService');
   constructor(private httpService: HttpService) {}
-  getEntities(
+  async getEntities(
     request: RequestDto,
-  ): Observable<AxiosResponse<Response<EntitiesDto>>> {
+  ) {
     try {
-      console.log(request.inicio);
-      const apiUrl =
-        'https://awovcw7p76.execute-api.us-east-1.amazonaws.com/dev/entity/v2.1/entities/3';
-      return this.httpService.get(apiUrl).pipe(
-        map((response) => {
-          console.log('response.data.data  ', response.data.data);
-          return response.data.data;
-        }),
-      );
+
+      
+      let index:number= request.inicio;
+      if(index>request.fin)
+      throw new BadRequestException("El codigo de inicio no debe ser mayor al codigo fin");
+      const array:EntitiesDto[]=[]
+      while(index<=request.fin){
+        const apiUrl =
+        process.env.URL_REST+index;
+      
+        const rta=  this.httpService.get(apiUrl).pipe(
+          map((response) => {
+            return response.data;
+          }),
+       
+        );  
+        const a=await lastValueFrom(rta)
+        console.log(a)
+        if(a.code==="F133"){
+          throw new NotFoundException("La propiedad con el codigo " + index + " no existe")
+        }
+        array.push(a.data)
+        index++;
+      }
+    
+      console.log("aa ", array)
+       return {
+        data:{
+          array
+        }
+       };
     } catch (error) {
       console.log(error);
       this.logger.error(error);

@@ -1,0 +1,119 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "/entities": {
+            "post": {
+                "operationId": "EntitiesController_getAll",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RequestDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "get entities",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/EntitiesDto"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "bad Request"
+                    }
+                },
+                "tags": [
+                    "Entities"
+                ]
+            }
+        }
+    },
+    "info": {
+        "title": "Api entities",
+        "description": "The entities API description",
+        "version": "1.0",
+        "contact": {}
+    },
+    "tags": [],
+    "servers": [],
+    "components": {
+        "schemas": {
+            "RequestDto": {
+                "type": "object",
+                "properties": {
+                    "inicio": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "fin": {
+                        "type": "number",
+                        "example": 2
+                    }
+                },
+                "required": [
+                    "inicio",
+                    "fin"
+                ]
+            },
+            "EntitiesDto": {
+                "type": "object",
+                "properties": {
+                    "entityId": {
+                        "type": "number",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "aguila"
+                    },
+                    "identificationNumber": {
+                        "type": "string",
+                        "example": "123"
+                    },
+                    "expirationDate": {
+                        "format": "date-time",
+                        "type": "string",
+                        "example": "2030-10-27"
+                    },
+                    "contactName": {
+                        "type": "string",
+                        "example": "Diego"
+                    },
+                    "contactMail": {
+                        "type": "string",
+                        "example": "diegoaliriogm@gmail.com"
+                    },
+                    "ipAddress": {
+                        "type": "string",
+                        "example": "2030.1.1.1"
+                    },
+                    "logo": {
+                        "type": "string",
+                        "example": "logo"
+                    }
+                },
+                "required": [
+                    "entityId",
+                    "name",
+                    "identificationNumber",
+                    "expirationDate",
+                    "contactName",
+                    "contactMail",
+                    "ipAddress",
+                    "logo"
+                ]
+            }
+        }
+    }
+}
